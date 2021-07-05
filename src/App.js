@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import data from "./data";
+import SingleMenuItem from "./SingleMenuItem";
+import {Container, Row} from "react-bootstrap";
+import {useState} from "react";
+import CategoryButtons from "./CategoryButtons";
 
 function App() {
+
+    const [items, setItems] = useState(data);
+    const menuItems = items.map((singleItem)=> {
+        return <SingleMenuItem item={singleItem} key={singleItem.id}/>
+    });
+
+    const filteringItems =(category) => {
+        if(category==='all') {
+            setItems(data);
+            return;
+        }
+        const newItems = data.filter((item)=>item.category===category) ;
+        setItems(newItems);
+    }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+      <Container>
+          <Row><h1>Our menu ...</h1></Row>
+          <Row>
+              <CategoryButtons handleCategory={filteringItems} menu={data}/>
+          </Row>
+          <Row >
+          {menuItems}
+          </Row>
+      </Container>
+      )
+
 }
 
 export default App;
